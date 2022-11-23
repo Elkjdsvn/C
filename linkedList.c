@@ -23,9 +23,7 @@ Node* loopLinkedList(int arr[], int arrLength)
 
     for (i = 1; i < arrLength; i++)
     {
-        actualNode->next = malloc(sizeof(Node));
-        actualNode->next->value = arr[i];
-        actualNode->next->next = NULL;
+        actualNode->next = newLinkedListNode(arr[i]);
         actualNode = actualNode->next;
     }
 
