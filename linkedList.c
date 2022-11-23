@@ -7,47 +7,39 @@ typedef struct Node
     struct Node *next;
 } Node;
 
-Node* newLinkedListNode(int value) 
+Node* newLinkedListNode(int value, Node* next)
 {
     Node* newNode = malloc(sizeof(Node));
     newNode->value = value;
-    newNode->next = NULL;
+    newNode->next = next;
     return newNode;
 }
 
 Node* loopLinkedList(int arr[], int arrLength)
 {
-    Node* head = newLinkedListNode(arr[0]);
+    Node* head = newLinkedListNode(arr[0], NULL);
     Node* actualNode = head;
 
     for (int i = 1; i < arrLength; i++)
     {
-        actualNode->next = newLinkedListNode(arr[i]);
+        actualNode->next = newLinkedListNode(arr[i], NULL);
         actualNode = actualNode->next;
     }
 
     return head;
 }
 
-Node* recursiveLinkedList(int arr[], int arrLength, int acc, Node* head, Node* actualNode)
+Node* recursiveLinkedList(int arr[], int arrLength)
 {
-    if (acc == arrLength - 1)
+    if (0 == arrLength)
     {
-        return head;
+        return NULL;
     }
 
-    if (!head) 
-    {
-        head = newLinkedListNode(arr[0]);
-        actualNode = head;
-    }
-
-    actualNode->next = newLinkedListNode(arr[acc+1]);
-    actualNode = actualNode->next;
-    acc++;
-
-    return recursiveLinkedList(arr, arrLength, acc, head, actualNode);
+    return newLinkedListNode(*arr, recursiveLinkedList(arr+1, arrLength-1));
 }
+
+
 
 // could be refactored as a for loop
 void printLinkedList(Node* head)
@@ -78,9 +70,12 @@ int main ()
     int a[5] = {1, 4, 7, 10, 13};
     int b[5] = {2, 5, 8, 11, 14};
     Node* loopListHead = loopLinkedList(a, sizeof(a)/sizeof(a[0]));
-    Node* recListHead = recursiveLinkedList(b, sizeof(b)/sizeof(b[0]), 0, NULL, NULL);
+    Node* recListHead = recursiveLinkedList(b, sizeof(b)/sizeof(b[0]));
     printLinkedList(loopListHead);
-    freeLinkedListMem(loopListHead);    
+    freeLinkedListMem(loopListHead);
     printLinkedList(recListHead);
     freeLinkedListMem(recListHead);
+    // system("pause");
+
+    return 0;
 }
