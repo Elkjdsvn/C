@@ -19,9 +19,8 @@ Node* loopLinkedList(int arr[], int arrLength)
 {
     Node* head = newLinkedListNode(arr[0]);
     Node* actualNode = head;
-    int i;
 
-    for (i = 1; i < arrLength; i++)
+    for (int i = 1; i < arrLength; i++)
     {
         actualNode->next = newLinkedListNode(arr[i]);
         actualNode = actualNode->next;
@@ -30,22 +29,24 @@ Node* loopLinkedList(int arr[], int arrLength)
     return head;
 }
 
-Node* recursiveLinkedList(int arr[], int acc, Node* head, Node* actualNode)
+Node* recursiveLinkedList(int arr[], int arrLength, int acc, Node* head, Node* actualNode)
 {
-    if (acc == 4)
+    if (acc == arrLength - 1)
     {
         return head;
     }
 
-    if (head == NULL) 
+    if (!head) 
     {
         head = newLinkedListNode(arr[0]);
         actualNode = head;
     }
+
     actualNode->next = newLinkedListNode(arr[acc+1]);
     actualNode = actualNode->next;
+    acc++;
 
-    return recursiveLinkedList(arr, acc+1, head, actualNode);
+    return recursiveLinkedList(arr, arrLength, acc, head, actualNode);
 }
 
 // could be refactored as a for loop
@@ -77,7 +78,7 @@ int main ()
     int a[5] = {1, 4, 7, 10, 13};
     int b[5] = {2, 5, 8, 11, 14};
     Node* loopListHead = loopLinkedList(a, sizeof(a)/sizeof(a[0]));
-    Node* recListHead = recursiveLinkedList(b, 0, NULL, NULL);
+    Node* recListHead = recursiveLinkedList(b, sizeof(b)/sizeof(b[0]), 0, NULL, NULL);
     printLinkedList(loopListHead);
     freeLinkedListMem(loopListHead);    
     printLinkedList(recListHead);
