@@ -7,7 +7,7 @@ typedef struct Node
     struct Node *next;
 } Node;
 
-Node* newLinkedListNode(int value, Node* next)
+Node* newNode(int value, Node* next)
 {
     Node* newNode = malloc(sizeof(Node));
     newNode->value = value;
@@ -15,42 +15,60 @@ Node* newLinkedListNode(int value, Node* next)
     return newNode;
 }
 
-Node* loopLinkedList(int arr[], int arrLength)
+Node* insertEnd(int value, Node* head) 
 {
-    Node* head = newLinkedListNode(arr[0], NULL);
-    Node* actualNode = head;
-
-    for (int i = 1; i < arrLength; i++)
+    if(head->next != NULL)
     {
-        actualNode->next = newLinkedListNode(arr[i], NULL);
-        actualNode = actualNode->next;
+        return insertEnd(value, head->next);
+    }
+
+    return head->next = newNode(value, NULL);
+}
+
+Node* bulkInsertEnd(int arr[], int arrLength, Node* head)
+{
+    if(head->next != NULL)
+    {
+        return bulkInsertEnd(arr, arrLength, head->next);
+    }
+
+    Node* currentNode = head;
+
+    for (int i = 0; i < arrLength; i++)
+    {
+        currentNode->next = newNode(arr[i], NULL);
+        currentNode = currentNode->next;
     }
 
     return head;
 }
 
-Node* recursiveLinkedList(int arr[], int arrLength)
+Node* recursiveBulkInsertEnd(int arr[], int arrLength, Node* head, Node* currentNode)
 {
-    if (0 == arrLength)
+    if (arrLength == 0)
     {
-        return NULL;
+        return head;
     }
 
-    return newLinkedListNode(*arr, recursiveLinkedList(arr+1, arrLength-1));
+    if (currentNode->next != NULL) 
+    {
+        return recursiveBulkInsertEnd(arr, arrLength, head, currentNode->next);
+    }
+
+    currentNode->next = newNode(*arr, NULL);
+
+    return recursiveBulkInsertEnd(arr+1, arrLength-1, head, currentNode->next);
 }
 
-
-
-// could be refactored as a for loop
 void printLinkedList(Node* head)
 {
-    Node* actualNode = head;
+    Node* currentNode = head;
     int i = 0;
-    while (actualNode != NULL) 
+    while (currentNode != NULL) 
     {
         i++;
-        printf("Node %d holds value : %d\n", i, actualNode->value);
-        actualNode = actualNode->next;
+        printf("Node %d holds value : %d\n", i, currentNode->value);
+        currentNode = currentNode->next;
     }
 }
 
@@ -69,13 +87,20 @@ int main ()
 {
     int a[5] = {1, 4, 7, 10, 13};
     int b[5] = {2, 5, 8, 11, 14};
-    Node* loopListHead = loopLinkedList(a, sizeof(a)/sizeof(a[0]));
-    Node* recListHead = recursiveLinkedList(b, sizeof(b)/sizeof(b[0]));
-    printLinkedList(loopListHead);
-    freeLinkedListMem(loopListHead);
+    int c[11] = {17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47};
+    
+    Node* loopListHead = newNode(0, NULL);
+    loopListHead = bulkInsertEnd(a, sizeof(a)/sizeof(*a), loopListHead);
+    Node* recListHead = newNode(-1, NULL);
+    recListHead = recursiveBulkInsertEnd(b, sizeof(b)/sizeof(*b), recListHead, recListHead);
+
+    // printLinkedList(loopListHead);
+    // freeLinkedListMem(loopListHead);
+    
+    recursiveBulkInsertEnd(a, sizeof(a)/sizeof(*a), recListHead, recListHead);
+    recursiveBulkInsertEnd(c, sizeof(c)/sizeof(*c), recListHead, recListHead);
     printLinkedList(recListHead);
     freeLinkedListMem(recListHead);
-    // system("pause");
 
     return 0;
 }
