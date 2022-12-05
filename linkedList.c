@@ -179,11 +179,7 @@ int main ()
 
     Node* mergedList = mergeTwoLists(loopListHead, recListHead);
     printLinkedList(mergedList);
-    // printLinkedList(loopListHead);
-    // printLinkedList(recListHead);
     freeLinkedListMem(mergedList);
-    // freeLinkedListMem(l1);
-    // freeLinkedListMem(l2);
 
     return 0;
 }
