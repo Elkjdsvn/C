@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct Node
 {
@@ -141,6 +142,48 @@ Node* mergeTwoLists(Node* list1, Node* list2)
     return head->next;
 }
 
+Node* middleNode(Node* head){
+    Node* slow = head;
+    Node* fast = head->next;
+    while(fast)
+    {
+        fast = fast->next;
+        slow = slow->next;
+        if(fast)
+        {
+            fast = fast->next;
+        }
+    }
+    return slow;
+}
+
+bool hasCycle(Node* head) 
+{
+    if(!head)
+    {
+        return false;
+    }
+
+    Node* slow = head;
+    Node* fast = head->next;
+
+    while(fast != NULL)
+    {
+        if(fast == slow)
+        {
+            return true;
+        }
+        if(fast->next == NULL)
+        {
+            return false;
+        }
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return false;
+}
+
 void printLinkedList(Node* head)
 {
     Node* currentNode = head;
@@ -174,12 +217,8 @@ int main ()
     loopListHead = bulkInsertEnd(a, sizeof(a)/sizeof(*a), loopListHead);
     Node* recListHead = newNode(-1, NULL);
     recListHead = recursiveBulkInsertEnd(b, sizeof(b)/sizeof(*b), recListHead, recListHead);
-    Node* l1 = loopListHead;
-    Node* l2 = recListHead;
-
-    Node* mergedList = mergeTwoLists(loopListHead, recListHead);
-    printLinkedList(mergedList);
-    freeLinkedListMem(mergedList);
+    printf("Middle node value : %d\n", middleNode(loopListHead)->value);
+    printf("Middle node value : %d\n", middleNode(recListHead)->value);
 
     return 0;
 }
