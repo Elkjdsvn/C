@@ -142,7 +142,7 @@ Node* mergeTwoLists(Node* list1, Node* list2)
     return head->next;
 }
 
-Node* middleNode(Node* head){
+Node* returnMiddleNode(Node* head){
     Node* slow = head;
     Node* fast = head->next;
     while(fast)
@@ -155,6 +155,36 @@ Node* middleNode(Node* head){
         }
     }
     return slow;
+}
+
+Node* swapNodePairs(Node* head){
+    if(!head || !head->next)
+    {
+        return head;
+    }
+
+    Node* first = head;
+    Node* second = head->next;
+    Node* temp;
+    head = second;
+
+    while(second)
+    {
+        temp = second->next;
+        second->next = first;
+        first->next = temp;
+        if(temp&&temp->next)
+        {
+            first->next = temp->next;
+            first = temp;
+            second = temp->next;
+        } else {
+            return head;
+        }
+
+    }
+
+    return head;
 }
 
 bool hasCycle(Node* head) 
@@ -217,8 +247,8 @@ int main ()
     loopListHead = bulkInsertEnd(a, sizeof(a)/sizeof(*a), loopListHead);
     Node* recListHead = newNode(-1, NULL);
     recListHead = recursiveBulkInsertEnd(b, sizeof(b)/sizeof(*b), recListHead, recListHead);
-    printf("Middle node value : %d\n", middleNode(loopListHead)->value);
-    printf("Middle node value : %d\n", middleNode(recListHead)->value);
+    recListHead = swapNodePairs(recListHead);
+    printLinkedList(recListHead);
 
     return 0;
 }
